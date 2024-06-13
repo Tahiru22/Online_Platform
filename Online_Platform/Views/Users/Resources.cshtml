@@ -1,0 +1,40 @@
+﻿@using Online_Platform.Models.WebModels.Courses;
+@model IEnumerable<Online_Platform.Services.Models.Resources.ResourcesByCourseServiceModel>
+@{
+    ViewData["Title"] = "Resources";
+}
+
+<h1>My resources</h1>
+
+@if (Model.Any())
+{
+    <section class="card-deck d-flex justify-content-start">
+        @foreach (var group in Model)
+        {
+            var courseInfoModel = new CourseBasicViewModel { Id = group.CourseId, Name = group.CourseName };
+            <article class="card-group col-12 col-md-6 col-xl-4 my-2">
+                <div class="card course-card border-info">
+                    <div class="card-header bg-info">
+                        <h5 class="card-title">@group.CourseName</h5>
+                    </div>
+                    <div class="card-body text-left">
+                        @foreach (var resource in group.Resources)
+                        {
+                            <p class="card-text">
+                                <partial name="_ResourceDownloadButtonPartial" model="resource.Id" />
+                                @resource.FileName
+                            </p>
+                        }
+                    </div>
+                    <div class="card-footer">
+                        <partial name="_CourseInfoButtonPartial" model="@courseInfoModel" />
+                    </div>
+                </div>
+            </article>
+        }
+    </section>
+}
+else
+{
+    <h5>No resources</h5>
+}

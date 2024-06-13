@@ -1,0 +1,13 @@
+﻿@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Controllers;
+@using Online_Platform.Infrastructure.Helpers;
+@using Online_Platform.Models.WebModels;
+@model int
+
+<a asp-controller="@WebConstants.OrdersController"
+   asp-action="@nameof(OrdersController.Delete)"
+   asp-route-id="@Model"
+   data-toggle="tooltip" title="Cancel order"
+   class="btn btn-@FormActionEnum.Delete.ToStyle()">
+    <i class="fa fa-trash"></i>
+</a>

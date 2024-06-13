@@ -1,0 +1,13 @@
+﻿@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Infrastructure.Constant;
+@model Online_Platform.Models.WebModels.Courses.CourseBasicViewModel
+
+
+<a asp-area=""
+   asp-controller="@WebConstants.CoursesController"
+   asp-action="@nameof(Online_Platform.Controllers.CoursesController.Details)"
+   asp-route-id="@Model.Id"
+   asp-route-name="@Model.Name?.ToFriendlyUrl()"
+   data-toggle="tooltip" title="Course details" class="btn btn-outline-info mx-1">
+    <i class="fa fa-info"></i>
+</a>

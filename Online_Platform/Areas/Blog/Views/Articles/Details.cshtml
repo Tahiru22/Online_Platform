@@ -1,0 +1,35 @@
+﻿@using Online_Platform.Infrastructure.Constant;
+@model ArticleDetailsServiceModel
+@{
+    ViewData["Title"] = @Model.Title;
+}
+
+<section class="d-flex flex-wrap justify-content-start align-items-center">
+    <h1 class="font-weight-bold">@Model.Title</h1>
+    @if (User.IsInRole(WebConstants.BloggerRole)
+       && User.Identity.Name == Model.AuthorUsername)
+    {
+        <div class="d-flex justify-content-between">
+            <a asp-action="@nameof(ArticlesController.Edit)" asp-route-id="@Model.Id" data-toggle="tooltip" title="Edit" class="btn btn-outline-warning mx-1"><i class="fa fa-pen"></i></a>
+            <a asp-action="@nameof(ArticlesController.Delete)" asp-route-id="@Model.Id" data-toggle="tooltip" title="Delete" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+        </div>
+    }
+</section>
+
+<h6 class="text-muted">
+    @Model.PublishDate.ToLocalTime() |
+    <a asp-area=""
+       asp-controller="@WebConstants.TrainersController"
+       asp-action="@nameof(TrainersController.Details)"
+       asp-route-id="@Model.AuthorUsername">@Model.AuthorName</a> |
+    <span>
+        <i class="fa fa-envelope"></i> <a href="mailto:@Model.AuthorEmail">@Model.AuthorEmail</a>
+    </span>
+</h6>
+
+@* NB. Content is already sanitized in db *@
+<article class="text-justify">@Html.Raw(Model.Content)</article>
+
+<div>
+    <a asp-action="@nameof(ArticlesController.Index)">Back to Articles</a>
+</div>

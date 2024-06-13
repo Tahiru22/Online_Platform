@@ -1,0 +1,16 @@
+﻿@using Online_Platform.Infrastructure.Constant;
+@foreach (var tempDataKvp in TempData)
+{
+    var notificationType = tempDataKvp.Key;
+    var notificationMsg = TempData[notificationType];
+    var cssStyle = WebConstants.Styles.ContainsKey(notificationType)
+        ? WebConstants.Styles[notificationType]
+        : null; //  Prevents duplicate notifications from Managing User Account
+
+    if (notificationMsg != null && cssStyle != null)
+    {
+        <div class="notification alert alert-@cssStyle alert-dismissible fade show shadow" role="alert" data-dismiss="alert" aria-hidden="true">
+            @notificationMsg
+        </div>
+    }
+}

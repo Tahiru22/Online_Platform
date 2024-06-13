@@ -1,0 +1,46 @@
+﻿@using Online_Platform.Models.WebModels;
+@model AdminUserRoleFormModel
+
+@if (Model != null)
+{
+    var modalId = $"modal-remove-user-role-{Guid.NewGuid().ToString()}";
+
+    @*Button trigger modal*@
+    <button type="button" class="btn btn-sm btn-@FormActionEnum.Remove.ToStyle()" data-toggle="modal" data-target="#@modalId">
+        <i class="fa fa-times"></i>
+    </button>
+
+    @*Modal*@
+    <div class="modal fade text-left" id=@modalId tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm delete</h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Are you sure you want to remove
+                        user <strong>@(Model.Username ?? string.Empty)</strong>
+                        from role <strong>@(Model.Role ?? string.Empty)</strong>?
+                    </p>
+                </div>
+                <div>
+                    <form asp-action="@nameof(UsersController.UpdateUserRole)" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="Action" value="@FormActionEnum.Remove" hidden />
+                        <input asp-for="UserId" hidden />
+                        <input asp-for="Role" hidden />
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-@StyleHelpers.ToStyle(FormActionEnum.Remove)">Remove</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

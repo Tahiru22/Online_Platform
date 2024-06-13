@@ -1,0 +1,65 @@
+﻿@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Models.WebModels;
+@model AdminUserListingViewModel
+@{
+    ViewData["Title"] = "User Administration";
+    var createRoleModel = new AdminRoleFormModel { Action = FormActionEnum.Create };
+}
+
+<section class="d-flex flex-wrap justify-content-between">
+    <article class="col-sm-12 col-lg-6 border border-info rounded shadow p-3">
+        <div class="d-flex justify-content-start align-items-center">
+            <h1 class="mr-1">Roles</h1>
+            <partial name="_RoleCreateDeleteFormPartial" model="createRoleModel" />
+        </div>
+
+        @foreach (var role in Model.RolesWithUsersInRole)
+        {
+            <div class="d-flex justify-content-start align-items-center">
+                <h3 class="mr-1">@role.Role.ToFriendlyName()</h3>
+                @{
+                    var deleteRoleModel = new AdminRoleFormModel { Action = FormActionEnum.Delete, Name = role.Role };
+                }
+                <partial name="_RoleCreateDeleteFormPartial" model="deleteRoleModel" />
+            </div>
+
+            @if (role.UsersInRole.Any())
+            {
+                <ul>
+                    @foreach (var user in role.UsersInRole)
+                    {
+                        var userRoleRemoveModel = new AdminUserRoleFormModel { UserId = user.Id, Role = role.Role, Username = user.Username };
+                        <li class="d-flex flex-wrap justify-content-start align-items-center">
+                            <partial name="_UserPartial" model="user" />
+                            <partial name="_UserRoleRemoveFormPartial" model="userRoleRemoveModel" />
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No users in role</p>
+            }
+        }
+    </article>
+
+    <article class="col-sm-12 col-lg-6 p-3">
+        <h1>User administration</h1>
+        <header class="d-flex flex-wrap py-3">
+            <div class="col-md-6"><i class="fa fa-user"></i> User</div>
+            <div class="col-md-6"><i class="fa fa-tag"></i> Roles</div>
+        </header>
+        @foreach (var user in Model.Users)
+        {
+            var userRoleAddModel = new AdminUserRoleFormModel { UserId = user.Id, Roles = Model.Roles };
+            <article class="d-flex flex-wrap shadow-sm py-2 my-1">
+                <div class="col-md-6"><partial name="_UserPartial" model="@user" /></div>
+                <div class="col-md-6"><partial name="_UserRoleAddFormPartial" model="userRoleAddModel" /></div>
+            </article>
+        }
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

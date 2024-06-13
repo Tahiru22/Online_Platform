@@ -1,0 +1,21 @@
+﻿@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Areas.Blog.Controllers;
+<section class="jumbotron text-center bg-transparent shadow">
+    <h1 class="display-4">Welcome to the @WebConstants.University</h1>
+    <p>
+        <img src="https://res.cloudinary.com/astambi/image/upload/v1567520288/UniversitySystem/Learning.png" alt="Learning" class="w-100" />
+    </p>
+    <p class="lead">
+        We invite you to explore our courses
+    </p>
+    <hr class="my-4">
+    <p class="lead">
+        <a class="btn btn-outline-info btn-lg"
+           asp-controller="@WebConstants.CoursesController"
+           asp-action="@nameof(ArticlesController.Index)" role="button">Courses</a>
+        <a class="btn btn-outline-success btn-lg"
+           asp-area="@WebConstants.BlogArea"
+           asp-controller="@WebConstants.ArticlesController"
+           asp-action="@nameof(ArticlesController.Index)" role="button">Blog <i class="fa fa-feather-alt"></i></a>
+    </p>
+</section>

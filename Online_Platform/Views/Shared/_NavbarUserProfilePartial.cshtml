@@ -1,0 +1,32 @@
+﻿@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Controllers;
+@if (User.Identity.IsAuthenticated)
+{
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="@WebConstants.UsersController"
+       asp-action="@nameof(Online_Platform.Controllers.UsersController.Profile)" title="Profile">Profile</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="@WebConstants.UsersController"
+       asp-action="@nameof(Online_Platform.Controllers.UsersController.Courses)">Courses</a>
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="@WebConstants.UsersController"
+       asp-action="@nameof(Online_Platform.Controllers.UsersController.Resources)">Resources</a>
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="@WebConstants.UsersController"
+       asp-action="@nameof(Online_Platform.Controllers.UsersController.Exams)">Exams</a>
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="@WebConstants.UsersController"
+       asp-action="@nameof(Online_Platform.Controllers.UsersController.Certificates)">Certificates <i class="fa fa-certificate text-info"></i></a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="@WebConstants.OrdersController"
+       asp-action="@nameof(OrdersController.Index)">Payments <i class="fa fa-money-bill text-info"></i></a>
+    <div class="dropdown-divider"></div>
+}

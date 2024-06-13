@@ -1,0 +1,17 @@
+﻿@model Online_Platform.Models.WebModels.Trainers.TrainerCoursePageListingViewModel
+@{
+    ViewData["Title"] = "Trainings";
+}
+
+@if (Model.CoursesToEvaluate.Any())
+{
+    <partial name="_CoursesToEvaluatePartial" for="CoursesToEvaluate" />
+}
+
+<header class="d-flex flex-wrap justify-content-between align-items-center">
+    <h1>Trainings</h1>
+    <partial name="_SearchPartial" for="Search" />
+</header>
+
+<partial name="_CoursesListPartial" model="@Model" />
+<partial name="_PaginationPartial" for="Pagination" />

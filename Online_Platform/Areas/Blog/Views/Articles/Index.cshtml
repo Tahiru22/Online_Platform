@@ -1,0 +1,46 @@
+﻿@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Infrastructure.Constant;
+@model ArticlePageListingViewModel
+
+@{
+    ViewData["Title"] = "Blog Articles";
+}
+
+<section class="d-flex flex-wrap justify-content-between align-items-center">
+    <h1>Articles &amp; Tutorials</h1>
+    <partial name="_SearchPartial" for="Search" />
+
+    @if (User.IsInRole(WebConstants.BloggerRole))
+    {
+        <a asp-action="Create" class="btn btn-outline-success">
+            Publish <i class="fa fa-feather-alt"></i>
+        </a>
+    }
+</section>
+
+@if (Model.Articles.Any())
+{
+    <section class="card-deck d-flex flex-wrap">
+        @foreach (var article in Model.Articles)
+        {
+            <a asp-action="@nameof(ArticlesController.Details)"
+               asp-route-id="@article.Id"
+               asp-route-title="@article.Title.ToFriendlyUrl()"
+               class="article-card-link d-flex col-sm-6 col-lg-4 text-decoration-none">
+                <div class="article-card card border-success m-2">
+                    <div class="card-body">
+                        <h4 class="card-title">@article.Title</h4>
+                        <h6 class="card-subtitle text-muted mb-2">by @article.AuthorName</h6>
+                    </div>
+                    <div class="card-footer">@article.PublishDate.ToLocalTime()</div>
+                </div>
+            </a>
+        }
+    </section>
+}
+else
+{
+    <h4>No articles</h4>
+}
+
+<partial name="_PaginationPartial" for="Pagination" />

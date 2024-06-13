@@ -1,0 +1,47 @@
+﻿@using Online_Platform.Infrastructure.Extensions;
+@model Online_Platform.Models.WebModels.Exams.ExamSubmissionsListingViewModel
+@{
+    ViewData["Title"] = "Exam Submissions";
+}
+
+<h1>Exam submissions</h1>
+
+<section class="d-flex justify-content-around align-items-start">
+    <partial name="_CourseCardPartial" for="Course" />
+
+    <article>
+        @if (Model.Course.EndDate.IsToday())
+        {
+            <div class="d-flex justify-content-end">
+                <partial name="_ExamUploadFormPartial" for="Course.Id" />
+            </div>
+        }
+
+        @if (Model.ExamSubmissions.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Submission date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var exam in Model.ExamSubmissions)
+                    {
+                        <tr>
+                            <td>@exam.SubmissionDate.ToLocalTime()</td>
+                            <td>
+                                <partial name="_ExamDownloadButtonPartial" model="exam.Id" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h5>No exam submissions</h5>
+        }
+    </article>
+</section>

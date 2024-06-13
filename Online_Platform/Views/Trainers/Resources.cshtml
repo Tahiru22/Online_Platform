@@ -1,0 +1,45 @@
+﻿@using Online_Platform.Models.WebModels.Resources;
+@model Online_Platform.Services.Models.Courses.CourseWithResourcesServiceModel
+@{
+    ViewData["Title"] = "Resources";
+    var resourceCreateModel = new ResourceCreateFormModel { CourseId = Model.Id };
+}
+
+<h1>Resources</h1>
+
+<section class="d-flex flex-wrap justify-content-around align-items-start">
+    <partial name="_CourseCardPartial" model="Model" />
+
+    <article class="col-sm-12 col-lg-8">
+        <partial name="_ResourceUploadFormPartial" model="@resourceCreateModel" />
+
+        @if (Model.Resources.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr class="align-bottom">
+                        <th>Resource</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var resource in Model.Resources)
+                    {
+                        var resourceModel = new ResourceFormModel { ResourceId = resource.Id, CourseId = Model.Id, ResourceName = resource.FileName };
+                        <tr>
+                            <td>@resource.FileName</td>
+                            <td class="d-flex flex-wrap justify-content-around m-auto">
+                                <partial name="_ResourceDownloadButtonPartial" model="resource.Id" />
+                                <partial name="_ResourceDeleteFormPartial" model="@resourceModel" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h5>No resources</h5>
+        }
+    </article>
+</section>

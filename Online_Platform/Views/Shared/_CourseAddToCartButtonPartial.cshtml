@@ -1,0 +1,12 @@
+﻿@using Online_Platform.Controllers;
+@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Infrastructure.Helpers;
+@using Online_Platform.Models.WebModels;
+@model int
+
+<a asp-controller="@WebConstants.ShoppingCartController"
+   asp-action="@nameof(ShoppingCartController.Add)"
+   asp-route-id="@Model"
+   data-toggle="tooltip" title="Add to cart" class="btn btn-@FormActionEnum.Enroll.ToStyle()">
+    <i class="fa fa-cart-arrow-down"></i>
+</a>

@@ -1,0 +1,47 @@
+﻿@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Models.WebModels;
+@model DiplomaDeleteFormModel
+
+@if (Model != null)
+{
+    var modalId = $"remove-diploma{Model.DiplomaId}-modal";
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-sm btn-@FormActionEnum.Remove.ToStyle()" data-toggle="modal" data-target="#@modalId">
+        <i class="fa fa-trash"></i>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="@modalId" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm delete</h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Are you sure you want to delete
+                        <strong>@(Model.Username ?? "this student")</strong>'s diploma for this curriculum?
+                    </p>
+                </div>
+                <div>
+                    <form asp-controller="@WebConstants.DiplomasController"
+                          asp-action="@nameof(DiplomasController.Delete)"
+                          asp-route-id="@Model.DiplomaId" method="post" class="mx-1">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="DiplomaId" hidden />
+                        <input asp-for="CurriculumId" hidden />
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-@FormActionEnum.Delete.ToStyle()">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

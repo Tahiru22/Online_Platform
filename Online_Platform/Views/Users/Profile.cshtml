@@ -1,0 +1,33 @@
+﻿@model Online_Platform.Models.WebModels.Users.UserProfileViewModel
+@using Online_Platform.Infrastructure.Constant;
+@{
+    ViewData["Title"] = "Profile";
+    var roles = Model.Roles.Any() ? string.Join(", ", Model.Roles) : "No roles";
+    var style = "btn btn-lg btn-outline-info m-3";
+}
+
+<partial name="_ProfilePartial" for="User" />
+
+<h3>
+    My roles:
+    <span class="lead">@roles</span>
+</h3>
+
+<h3>My data:</h3>
+<section class="d-flex flex-wrap justify-content-around">
+    <a asp-controller="@WebConstants.UsersController" asp-action="@nameof(Online_Platform.Controllers.UsersController.Courses)" class="@style">
+        <h4>Courses @Model.User.CoursesCount</h4>
+    </a>
+    <a asp-controller="@WebConstants.UsersController" asp-action="@nameof(Online_Platform.Controllers.UsersController.Resources)" class="@style">
+        <h4>Resources @Model.User.ResourcesCount</h4>
+    </a>
+    <a asp-controller="@WebConstants.UsersController" asp-action="@nameof(Online_Platform.Controllers.UsersController.Exams)" class="@style">
+        <h4>Exams @Model.User.ExamSubmissionsCount</h4>
+    </a>
+    <a asp-controller="@WebConstants.UsersController" asp-action="@nameof(Online_Platform.Controllers.UsersController.Certificates)" class="@style">
+        <h4>Certificates @Model.User.CertificatesCount</h4>
+    </a>
+    <a asp-controller="@WebConstants.UsersController" asp-action="@nameof(Online_Platform.Controllers.UsersController.Certificates)" class="@style">
+        <h4>Diplomas @Model.User.DiplomasCount</h4>
+    </a>
+</section>

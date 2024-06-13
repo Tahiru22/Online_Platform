@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Online_Platform.Services.Models.Orders.OrderListingServiceModel>
+@using Online_Platform.Controllers;
+@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Models.WebModels.Courses;
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h1>My orders</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order date</th>
+                <th class="text-right">Payment total</th>
+                <th>Payment method</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                var orderSelector = $"order-{order.Id}";
+                <tr>
+                    <td>@order.OrderDate.ToLocalTime()</td>
+                    <td class="text-right">@order.TotalPrice.ToCurrency()</td>
+                    <td>@order.PaymentMethod.ToFriendlyName()</td>
+                    <td>@order.Status </td>
+                    <td>
+                        <button id=@orderSelector data-toggle="tooltip" title="View order items"
+                                class="btn btn-outline-info order-details-toggler">
+                            @order.OrderItems.Count()
+                        </button>
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <partial name="_InvoiceDownloadFormPartial" model="@order.InvoiceId" />
+                        <a asp-controller="@WebConstants.OrdersController"
+                           asp-action="@nameof(OrdersController.Details)"
+                           asp-route-id="@order.Id"
+                           data-toggle="tooltip" title="Details" class="btn btn-outline-info">
+                            <i class="fa fa-info"></i>
+                        </a>
+                        <partial name="_OrderDeleteButtonPartial" model="order.Id" />
+                    </td>
+                </tr>
+                @foreach (var item in order.OrderItems)
+                {
+                    var courseModel = new CourseBasicViewModel { Id = item.CourseId, Name = item.CourseName };
+                    <tr class="order-item @orderSelector table-light shadow">
+                        <td></td>
+                        <td class="text-right">@item.Price.ToCurrency()</td>
+                        <td colspan="2">@item.CourseName</td>
+                        <td>
+                            <partial name="_CourseInfoButtonPartial" model="courseModel" />
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h5>No orders</h5>
+}

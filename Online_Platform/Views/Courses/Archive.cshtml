@@ -1,0 +1,16 @@
+﻿@using Online_Platform.Infrastructure.Constant;
+@model Online_Platform.Models.WebModels.Courses.CoursePageListingViewModel
+
+@{
+    ViewData["Title"] = "Courses Archive";
+}
+
+<header class="d-flex flex-wrap justify-content-between align-items-center">
+    <h1>Archive</h1>
+    <partial name="_SearchPartial" for="Search" />
+    <a asp-action="@nameof(Online_Platform.Controllers.CoursesController.Index)"
+       asp-route-search="@Model.Search.SearchTerm" class="btn bnt-lg btn-outline-info">Courses</a>
+</header>
+
+<partial name="_CoursesListPartial" model="@Model" />
+<partial name="_PaginationPartial" for="Pagination" />

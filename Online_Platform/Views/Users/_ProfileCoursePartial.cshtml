@@ -1,0 +1,58 @@
+﻿@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Infrastructure.Extensions;
+@using Online_Platform.Models.WebModels.Courses;
+@using Online_Platform.Models.WebModels.Users;
+@using Online_Platform.Models.WebModels;
+@model Online_Platform.Services.Models.Courses.CourseProfileMaxGradeServiceModel
+
+@if (Model != null)
+{
+    var courseInfoModel = new CourseBasicViewModel { Id = Model.CourseId, Name = Model.CourseName };
+    var certificateDloadModel = new CertificateDownloadFormModel { Id = Model.CertificateId, Action = FormActionEnum.Certificate };
+
+    <article class="card-group col-sm-6 col-lg-4 col-xl-3 my-2">
+        <div class="card course-card border-info">
+            <div class="card-header bg-info d-flex flex-wrap justify-content-around small">
+                <div class="px-1"><i class="fa fa-hourglass-start"></i> @Model.CourseStartDate.ToDate()</div>
+                <div class="px-1"><i class="fa fa-hourglass-end"></i> @Model.CourseEndDate.ToDate()</div>
+            </div>
+            <div class="card-body d-flex justify-content-center align-items-center">
+                <h5 class="card-title">@Model.CourseName</h5>
+            </div>
+            <div class="card-footer">
+                <partial name="_CertificateDownloadFormPartial" model="certificateDloadModel" />
+
+                @if (Model.GradeBgMax != null)
+                {
+                    <h5 class="card-subtitle">Grade @Model.GradeBgMax</h5>
+                }
+                else
+                {
+                    <h5 class="card-subtitle font-weight-light">No grade</h5>
+                }
+            </div>
+            @if (Model.CourseEndDate.IsToday())
+            {
+                <div class="card-footer shadow">
+                    <partial name="_ExamUploadFormPartial" for="CourseId" />
+                </div>
+            }
+            else if (Model.CourseStartDate.IsUpcoming())
+            {
+                <div class="card-footer text-uppercase shadow">
+                    <div class="bg-info text-white shadow py-2">Upcoming</div>
+                </div>
+            }
+            else if (!Model.CourseEndDate.HasEnded())
+            {
+                <div class="card-footer text-uppercase shadow">
+                    <div class="bg-success text-white shadow py-2">Active</div>
+                </div>
+            }
+            <div class="card-footer d-flex flex-wrap justify-content-around align-items-center">
+                <partial name="_CourseInfoButtonPartial" model="@courseInfoModel" />
+                <partial name="_StudentCourseExamsButtonPartial" for="CourseId" />
+            </div>
+        </div>
+    </article>
+}

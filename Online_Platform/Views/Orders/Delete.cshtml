@@ -1,0 +1,24 @@
+﻿@using Online_Platform.Controllers;
+@using Online_Platform.Infrastructure.Helpers;
+@using Online_Platform.Models.WebModels;
+@model Online_Platform.Services.Models.Orders.OrderListingServiceModel
+@{
+    ViewData["Title"] = "Delete Order";
+}
+
+<h1>Delete order</h1>
+
+<partial name="_OrderDetailsPartial" model="Model" />
+
+<h5>Are you sure you want to cancel this order?</h5>
+<p>
+    Upon confirming order cancellation you would be <strong>unsubscribed from all courses</strong> listed above and would <strong>loose access to the courses' resources</strong>.
+</p>
+
+<div class="d-flex justify-content-between">
+    <a asp-action="@nameof(OrdersController.Index)" class="btn btn-outline-info">Back to Orders</a>
+    <form asp-action="@nameof(OrdersController.ConfirmDelete)"
+          asp-route-id="@Model.Id" method="post">
+        <button type="submit" class="btn btn-@FormActionEnum.Delete.ToStyle()">Confirm cancellation</button>
+    </form>
+</div>

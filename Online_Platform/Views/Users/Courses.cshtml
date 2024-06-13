@@ -1,0 +1,37 @@
+﻿@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Infrastructure.Extensions;
+@model IEnumerable<Online_Platform.Services.Models.Courses.CourseProfileMaxGradeServiceModel>
+
+@{
+    ViewData["Title"] = "My Courses";
+    var gradedCourses = Model.Where(c => c.GradeBgMax != null);
+    var averageGrade = gradedCourses.Any() ? gradedCourses.Average(c => c.GradeBgMax) : null;
+}
+
+@if (Model.Any(c => c.CourseEndDate.IsToday()))
+{
+    <partial name="_CoursesWithExamsPartial" model="Model" />
+}
+
+<h1 class="d-flex justify-content-between">
+    My courses
+    @if (averageGrade != null)
+    {
+        <span>Average grade: @averageGrade.Value.ToNumberDecimal()</span>
+    }
+</h1>
+@if (Model.Any())
+{
+    <section class="card-deck d-flex justify-content-start">
+        @foreach (var course in Model)
+        {
+            <partial name="_ProfileCoursePartial" model="@course" />
+        }
+    </section>
+    <p class="small text-justify">@WebConstants.GradeAverageCoursesMsg</p>
+}
+else
+{
+    <h5>No courses</h5>
+}

@@ -1,0 +1,11 @@
+﻿@using Online_Platform.Controllers;
+@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Infrastructure.Helpers;
+@using Online_Platform.Models.WebModels;
+@model int
+
+<a asp-controller="@WebConstants.ExamsController"
+   asp-action="@nameof(ExamsController.Download)"
+   asp-route-id="@Model" data-toggle="tooltip" title="Download from cloud" class="btn btn-@StyleHelpers.ToStyle(FormActionEnum.Download)">
+    <i class="fa fa-download"></i>
+</a>

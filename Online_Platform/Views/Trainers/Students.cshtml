@@ -1,0 +1,78 @@
+﻿@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Models.WebModels.Trainers;
+@model Online_Platform.Models.WebModels.Trainers.StudentCourseGradeViewModel
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h1>Students</h1>
+
+<section class="d-flex flex-wrap justify-content-around align-items-start">
+    <partial name="_CourseCardPartial" for="Course" />
+
+    <article class="col-sm-12 col-lg-8">
+        <table class="table">
+            <thead>
+                <tr class="align-bottom">
+                    <th>Student / Certificates</th>
+                    <th>Grade</th>
+                    @if (Model.Course.CanBeEvaluated)
+                    {
+                        <th>Exam</th>
+                        <th>Update grade</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model.Students)
+                {
+                    <tr>
+                        <td class="align-top">
+                            @student.StudentName (@student.StudentUserName)
+                            <partial name="_EmailPartial" model="@student.StudentEmail" />
+                            @foreach (var certificate in student.Certificates)
+                            {
+                                var certificateDeleteModel = new CertificateDeleteFormModel { CertificateId = certificate.Id, CourseId = Model.Course.Id, StudentUsername = student.StudentUserName, Grade = certificate.GradeBg };
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <span class="mr-1">
+                                        <i class="fa fa-certificate btn text-info"></i>
+                                        @certificate.IssueDate.ToDate() (@certificate.GradeBg)
+                                    </span>
+                                    <partial name="_CertificateDeleteFormPartial" model="certificateDeleteModel" />
+                                </div>
+                            }
+                        </td>
+                        <td class="align-top">@student.GradeBg</td>
+
+                        @if (Model.Course.CanBeEvaluated)
+                        {
+                    <td class="align-top text-center">
+                        @if (student.HasExamSubmission)
+                        {
+                            <partial name="_ExamDownloadButtonPartial" model="student.ExamId" />
+                        }
+                        else
+                        {
+                            <i class="fa fa-user-slash"></i>
+                        }
+                    </td>
+                            <td class="align-top">
+                                @if (student.HasExamSubmission)
+                                {
+                                    var formModel = new StudentCourseGradeFormModel { CourseId = Model.Course.Id, StudentId = student.StudentId, GradeBg = student.GradeBg };
+                                    <partial name="_GradeFormPartial" model="@formModel" />
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p class="small text-justify">@WebConstants.TrainersEvaluateExamsAfterCourseEndsMsg</p>
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

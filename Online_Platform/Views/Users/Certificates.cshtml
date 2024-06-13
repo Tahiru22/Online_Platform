@@ -1,0 +1,90 @@
+﻿@model Online_Platform.Models.WebModels.Users.UserCertificatesDiplomasViewModel
+@using Online_Platform.Infrastructure.Configurations;
+@using Online_Platform.Infrastructure.Constant;
+@using Online_Platform.Controllers;
+@using Online_Platform.Models.WebModels.Courses;
+@using Online_Platform.Models.WebModels.Users;
+@using Online_Platform.Models.WebModels;
+@{
+    ViewData["Title"] = "Certificates";
+    var averageGrade = Model.Certificates.Any()
+        ? Model.Certificates.Select(c => c.Certificates.First()).Average(c => c.GradeBg)
+        : 0;
+}
+
+@if (Model.Diplomas.Any())
+{
+    <h1>My diplomas</h1>
+    <section class="card-columns mb-5">
+        @foreach (var diploma in Model.Diplomas)
+        {
+            var diplomaDloadModel = new CertificateDownloadFormModel { Id = diploma.Id, Action = FormActionEnum.Diploma };
+            <article class="card-group">
+                <div class="card course-card border-info">
+                    <div class="card-header bg-info">
+                        <h5 class="card-title">@diploma.CurriculumName</h5>
+                    </div>
+                    <div class="card-body">
+                        <partial name="_CertificateDownloadFormPartial" model="diplomaDloadModel" />
+                        <a asp-controller="@WebConstants.CertificatesController"
+                           asp-action="@nameof(CertificatesController.Diploma)"
+                           asp-route-id="@diploma.Id" class="text-info font-weight-bold">
+                            Diploma
+                        </a>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text text-muted">@diploma.IssueDate.ToDate()</p>
+                    </div>
+                </div>
+            </article>
+        }
+    </section>
+}
+
+<h1 class="d-flex justify-content-between flex-wrap">
+    My certificates
+    @if (averageGrade > 0)
+    {
+        <span>Average grade: @averageGrade.ToNumberDecimal()</span>
+    }
+</h1>
+
+@if (Model.Certificates.Any())
+{
+    <section class="card-columns">
+        @foreach (var group in Model.Certificates)
+        {
+            var courseInfoModel = new CourseBasicViewModel { Id = group.CourseId, Name = group.CourseName };
+            <article class="card-group">
+                <div class="card course-card border-info">
+                    <div class="card-header bg-info">
+                        <h5 class="card-title">@group.CourseName</h5>
+                    </div>
+                    @foreach (var certificate in group.Certificates)
+                    {
+                        var certificateDloadModel = new CertificateDownloadFormModel { Id = certificate.Id, Action = FormActionEnum.Certificate };
+                        <div class="card-body">
+                            <partial name="_CertificateDownloadFormPartial" model="certificateDloadModel" />
+                            <h5 class="card-text font-weight-bold">
+                                <a asp-controller="@WebConstants.CertificatesController"
+                                   asp-action="@nameof(CertificatesController.Certificate)"
+                                   asp-route-id="@certificate.Id" class="text-info">
+                                    Grade @certificate.GradeBg
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted">@certificate.IssueDate.ToDate()</p>
+                        </div>
+                    }
+                    <div class="card-footer">
+                        <partial name="_CourseInfoButtonPartial" model="@courseInfoModel" />
+                    </div>
+                </div>
+            </article>
+        }
+    </section>
+    <p class="small text-justify">@WebConstants.GradeAverageCertificatesMsg</p>
+}
+else
+{
+    <h5>No certificates</h5>
+}

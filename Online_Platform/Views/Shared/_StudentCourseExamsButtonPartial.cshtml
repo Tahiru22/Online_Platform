@@ -1,0 +1,9 @@
+﻿@using Online_Platform.Controllers
+@using Online_Platform.Infrastructure.Constant;
+@model int
+
+<a asp-controller="@WebConstants.ExamsController"
+        asp-action="@nameof(ExamsController.Course)"
+        asp-route-id="@Model" class="btn btn-outline-info" data-toggle="tooltip" title="Exam submissions">
+    <i class="fa fa-code"></i>
+</a>
